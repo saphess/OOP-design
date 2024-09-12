@@ -8,19 +8,72 @@ public class TestRadio {
 
     @ParameterizedTest
     @CsvSource({
+            "9, 9",
+            "10, 10",
+            "11, 11",
+            "1, 1",
+            "0, 10",
+            "-1, 10"
+    })
+    public void shouldSetSizeRadioStation(int sizeRadioStation, int expected){
+        Radio radio = new Radio(sizeRadioStation);
+
+        int actual = radio.getSizeRadioStation();
+        Assertions.assertEquals(actual, expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "8, 6, 7",
+            "8, 7, 0",
+            "8, 0, 1",
+            "8, 1, 2",
+            "9, 6, 7",
+            "9, 7, 8",
+            "9, 8, 0"
+    })
+    public void shouldLimitValueNextRadioStation(int sizeStation, int currentStation, int expected){
+        Radio radio = new Radio(sizeStation);
+        radio.setCurrentRadioStation(currentStation);
+
+        radio.nextRadioStation();
+
+        int actual = radio.getCurrentRadioStation();
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "8, 2, 1",
+            "8, 1, 0",
+            "8, 0, 7",
+            "8, 7, 6",
+            "9, 1, 0",
+            "9, 0, 8",
+            "9, 8, 7"
+    })
+    public void shouldLimitValuePrevRadioStation(int sizeStation, int currentStation, int expected){
+        Radio radio = new Radio(sizeStation);
+        radio.setCurrentRadioStation(currentStation);
+
+        radio.prevRadioStation();
+
+        int actual = radio.getCurrentRadioStation();
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
             "7, 8",
             "8, 9",
             "9, 0",
-            "10, 1", //по последним есть сомнения. не сказано, что пользователь может задать текущее значение выше 9,
-            //а потом уже менять. по сути, эти два теста - не логичны, тк текущая станция не может быть
-            //десятой или далее, но, это граничные значения и я должна их проверить...
-            //немного запуталась, прошу прокомментировать это :(
+            "10, 1",
             "11, 1",
             "0, 1",
             "-1, 1",
             "-2, 1"
     })
-    public void shouldLimitValueNextRadioStation(int currentStation, int expected) {
+    public void shouldLimitValueNextRadioStationIfByDefault(int currentStation, int expected) {
         Radio radio = new Radio();
         radio.setCurrentRadioStation(currentStation);
 
@@ -43,7 +96,7 @@ public class TestRadio {
             "10, 9",
             "11, 9"
     })
-    public void shouldLimitValuePrevRadioStation(int currentStation, int expected) {
+    public void shouldLimitValuePrevRadioStationIfByDefault(int currentStation, int expected) {
         Radio radio = new Radio();
         radio.setCurrentRadioStation(currentStation);
 
